@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подача показаний счетчиков</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">OUT of Gas</div>
+    <h1>Подача показаний</h1>
+    <button class="add-address-btn" onclick="showAddAddressForm()">+ Добавить адрес</button>
+  </header>
+
+  <div class="sidebar">
+    <nav>
+      <a href="payments.html">Платежи</a>
+      <a href="#readings" class="active">Подача показаний</a>
+      <a href="#requests" onclick="showRequestsPage()">Заявки</a>
+      <a href="services.html">Услуги</a>
+      <a href="#notifications">Уведомления</a>
+      <a href="#profile">Профиль</a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="content">
+      <div class="tabs">
+        <button class="tab-button active" onclick="showTab('submit')">Подача показаний</button>
+        <button class="tab-button" onclick="showTab('history')">История</button>
+      </div>
+
+      <div id="submit-tab" class="tab-content active">
+        <div class="addresses">
+
+        </div>
+      </div>
+
+      <div id="history-tab" class="tab-content">
+        <div class="history">
+
+        </div>
+      </div>
+
+      <div id="add-address-form" class="modal" style="display: none;">
+        <div class="modal-content">
+          <h3>Добавить адрес</h3>
+          <input type="text" id="newAddress" placeholder="Введите адрес (например, ул. Ленина, д. 10)" required>
+          <button onclick="addAddress()">Добавить</button>
+          <button onclick="hideAddAddressForm()">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="profile">
+      <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
+      <span>Алексей Иванов</span>
+    </div>
+  </footer>
+</div>
+
+<div id="requests-page" class="container" style="display: none;">
+  <header>
+    <div class="logo">OUT of Gas</div>
+    <h1>Заявки</h1>
+  </header>
+
+  <div class="sidebar">
+    <nav>
+      <a href="#payments">Платежи</a>
+      <a href="#readings" onclick="showReadingsPage()">Подача показаний</a>
+      <a href="#requests" class="active">Заявки</a>
+      <a href="services.html">Услуги</a>
+      <a href="#notifications">Уведомления</a>
+      <a href="#profile">Профиль</a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="content">
+      <h2>Подать заявку</h2>
+      <div class="form-group">
+        <label for="requestAddressId">Адрес:</label>
+        <select id="requestAddressId" required>
+          <option value="">Выберите адрес</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="requestTitle">Заголовок:</label>
+        <input type="text" id="requestTitle" required>
+      </div>
+      <div class="form-group">
+        <label for="requestComment">Комментарий:</label>
+        <textarea id="requestComment"></textarea>
+      </div>
+      <button onclick="submitRequest()">Отправить заявку</button>
+
+      <h2>История заявок</h2>
+      <div class="requests-history">
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="profile">
+      <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
+      <span>Алексей Иванов</span>
+    </div>
+  </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

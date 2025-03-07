@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Платежи</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">OUT of Gas</div>
+        <h1>Платежи</h1>
+    </header>
+
+    <div class="sidebar">
+        <nav>
+            <a href="payments.html" class="active">Платежи</a>
+            <a href="index.html">Подача показаний</a>
+            <a href="requests.html">Заявки</a>
+            <a href="services.html">Услуги</a>
+            <a href="#notifications">Уведомления</a>
+            <a href="#profile">Профиль</a>
+        </nav>
+    </div>
+
+    <main>
+        <div class="content">
+            <h2>Сводка платежей</h2>
+            <table id="paymentsTable">
+                <thead>
+                <tr>
+                    <th>ID показаний</th>
+                    <th>Адрес</th>
+                    <th>Тип счетчика</th>
+                    <th>Разница показаний</th>
+                    <th>Тариф</th>
+                    <th>Сумма платежа</th>
+                    <th>Дата создания</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Данные будут загружены динамически -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="profile">
+            <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
+            <span>Алексей Иванов</span>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Функция для загрузки платежей для пользователя с userId = 1
+    function loadPayments() {
+      fetch("http://localhost:8080/api/payments/1")
+        .then(response => {
+          if (!response.ok) throw new Error("Ошибка загрузки платежей");
+          return response.json();
+        })
+        .then(data => {
+            const tbody = document.getElementById("paymentsTable").querySelector("tbody");
+            tbody.innerHTML = "";
+            data.forEach(payment => {
+                const row = document.createElement("tr");
+                // Если платеж уже оплачен, кнопка будет неактивной с текстом "Оплачено"
+                let buttonHtml = "";
+                if (payment.paid) {
+                    buttonHtml = `<button disabled>Оплачено</button>`;
+                } else {
+                    // Передаем payment.id для обновления статуса
+                    buttonHtml = `<button onclick="markAsPaid(this, ${payment.id}, ${payment.amount})">Оплатить</button>`;
+                }
+                // Форматируем дату создания, если она присутствует
+                let createdAt = payment.createdAt ? new Date(payment.createdAt).toLocaleString() : "";
+                row.innerHTML = `
+                  <td>${payment.readingId || '-'}</td>
+                  <td>${payment.address}</td>
+                  <td>${payment.meterCategory}</td>
+                  <td>${payment.difference}</td>
+                  <td>${payment.tariff}</td>
+                  <td>${payment.amount}</td>
+                  <td>${createdAt}</td>
+                  <td>${buttonHtml}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Ошибка:", error));
+    }
+
+    // Функция для изменения статуса платежа через API
+    function markAsPaid(button, paymentId, amount) {
+      fetch(`http://localhost:8080/api/payments/${paymentId}/pay`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("Ошибка при оплате");
+        return response.json();
+      })
+      .then(updatedPayment => {
+        alert("Фиктивная оплата на сумму: " + amount);
+        // Перезагружаем платежи после обновления статуса
+        loadPayments();
+      })
+      .catch(error => {
+        console.error("Ошибка:", error);
+        alert("Ошибка при оплате");
+      });
+    }
+
+    // Загружаем платежи при загрузке страницы
+    document.addEventListener("DOMContentLoaded", loadPayments);
+
+    // Функция для перехода на страницу заявок (если понадобится)
+    function showRequestsPage() {
+      window.location.href = "requests.html";
+    }
+</script>
+</body>
+</html>

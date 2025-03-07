@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Услуги</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">OUT of Gas</div>
+    <h1>Услуги</h1>
+  </header>
+
+  <div class="sidebar">
+    <nav>
+      <a href="payments.html">Платежи</a>
+      <a href="index.html">Подача показаний</a>
+      <a href="requests.html">Заявки</a>
+      <a href="services.html" class="active">Услуги</a>
+      <a href="notifications.html">Уведомления</a>
+      <a href="profile.html">Профиль</a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="content">
+      <div class="tabs">
+        <button class="tab-button active" onclick="showTab('categories')">Категории услуг</button>
+        <button class="tab-button" onclick="showTab('orders')">История заказов</button>
+      </div>
+
+      <!-- Таб "Категории услуг" -->
+      <div id="categories-tab" class="tab-content active">
+        <div class="category-buttons">
+          <!-- Примеры категорий, можно изменять по необходимости -->
+          <button class="category-btn" onclick="loadServicesByCategory('Водоснабжение')">Водоснабжение</button>
+          <button class="category-btn" onclick="loadServicesByCategory('Газоснабжение')">Газоснабжение</button>
+          <button class="category-btn" onclick="loadServicesByCategory('Электроснабжение')">Электроснабжение</button>
+          <button class="category-btn" onclick="loadServicesByCategory('Отопление')">Отопление</button>
+          <button class="category-btn" onclick="loadServicesByCategory('Уборка и обслуживание')">Уборка и обслуживание</button>
+        </div>
+        <div class="services-list" id="services-list">
+          <!-- Здесь будут динамически подгружаться услуги -->
+        </div>
+        <!-- Форма заказа услуги (изначально скрыта) -->
+        <div id="order-form" class="order-form" style="display: none;">
+          <h3>Заказ услуги</h3>
+          <div class="form-group">
+            <label>Услуга:</label>
+            <p id="selectedService" class="service-display"></p>
+            <input type="hidden" id="serviceId" name="serviceId">
+          </div>
+          <div class="form-group">
+            <label for="addressId">Адрес:</label>
+            <select id="addressId" required>
+              <option value="">Выберите адрес</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="dateTime">Желаемое время:</label>
+            <input type="datetime-local" id="dateTime" required>
+          </div>
+          <div class="form-group">
+            <label for="comment">Комментарий:</label>
+            <textarea id="comment" placeholder="Опишите детали заказа"></textarea>
+          </div>
+          <button onclick="submitServiceOrder()">Заказать</button>
+          <button onclick="hideOrderForm()">Отмена</button>
+        </div>
+      </div>
+
+      <!-- Таб "История заказов" -->
+      <div id="orders-tab" class="tab-content">
+        <div class="orders-history">
+          <!-- Динамически загружается история заказов -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="profile">
+      <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
+      <span>Алексей Иванов</span>
+    </div>
+  </footer>
+</div>
+
+<script src="services.js"></script>
+</body>
+</html>

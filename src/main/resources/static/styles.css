@@ -1,0 +1,449 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #e9ecf2;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+h1 {
+    margin: 0;
+    color: #007bff;
+    font-size: 20px;
+}
+
+.add-address-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-address-btn:hover {
+    background-color: #0056b3;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f5f7fa;
+    padding: 20px 0;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 10px 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.sidebar nav a.active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+.sidebar nav a:hover {
+    background-color: #e9ecf2;
+}
+
+main {
+    flex: 1;
+    display: flex;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.tabs {
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #e9ecf2;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #666;
+}
+
+.tab-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.addresses, .history {
+    display: grid;
+    gap: 15px;
+}
+
+.address-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #007bff;
+    position: relative;
+}
+
+.address-card h3 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 16px;
+}
+
+.address-card .settings {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #e9ecf2;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #666;
+}
+
+.address-card .settings:hover {
+    background-color: #ddd;
+}
+
+.meter-section {
+    margin-top: 10px;
+    display: none;
+}
+
+.meter-section.active {
+    display: block;
+}
+
+.meter-select {
+    margin-bottom: 10px;
+}
+
+.meter-value {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.submit-meter-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.submit-meter-btn:hover {
+    background-color: #0056b3;
+}
+
+.history-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    border-left: 4px solid #007bff;
+}
+
+.history-item .meter-type {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.history-item .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.history-item .address {
+    font-style: italic;
+    color: #888;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal-content button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    background-color: #e9ecf2;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    color: #666;
+}
+
+.profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.requests-history .request-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    border-left: 4px solid #007bff;
+}
+
+.requests-history .request-item .title {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.requests-history .request-item .details {
+    font-size: 14px;
+    color: #666;
+}
+
+.requests-history .request-item .date {
+    color: #888;
+}
+
+.category-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.category-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.category-btn:hover {
+    background-color: #0056b3;
+}
+
+.services-list, .orders-history {
+    display: grid;
+    gap: 15px;
+}
+
+.service-card, .order-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #007bff;
+}
+
+.service-card h3 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 16px;
+}
+
+.service-card .details {
+    font-size: 14px;
+    color: #666;
+}
+
+.service-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.service-card button:hover {
+    background-color: #0056b3;
+}
+
+.order-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.order-form h3 {
+    color: #007bff;
+    margin-top: 0;
+}
+
+.order-item .title {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.order-item .details {
+    font-size: 14px;
+    color: #666;
+}
+
+.order-item .status {
+    font-style: italic;
+    color: #888;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.service-display {
+    font-size: 16px;
+    color: #007bff;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
