@@ -23,13 +23,21 @@ function showReadingsPage() {
     document.querySelector('.container').style.display = 'block';
     showTab('submit');
 }
-
 function showRequestsPage() {
-    document.querySelector('.container').style.display = 'none';
-    document.getElementById('requests-page').style.display = 'block';
-    loadRequestAddresses();
-    loadRequestHistory();
+    window.location.href = "index.html#requests";
+    setTimeout(() => {
+        document.querySelector('.container').style.display = 'none';
+        document.getElementById('requests-page').style.display = 'block';
+    }, 100); // Даем странице время загрузиться
 }
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('requests.html')) {
+        loadRequestAddresses();
+        loadRequestHistory();
+    }
+});
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     showTab('submit');

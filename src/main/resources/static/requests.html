@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявки</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">OUT of Gas</div>
+    <h1>Заявки</h1>
+  </header>
+
+  <div class="sidebar">
+    <nav>
+      <a href="payments.html">Платежи</a>
+      <a href="index.html">Подача показаний</a>
+      <a href="requests.html" class="active">Заявки</a>
+      <a href="services.html">Услуги</a>
+      <a href="notifications.html">Уведомления</a>
+      <a href="profile.html">Профиль</a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="content">
+      <h2>Подать заявку</h2>
+      <div class="form-group">
+        <label for="requestAddressId">Адрес:</label>
+        <select id="requestAddressId" required>
+          <option value="">Выберите адрес</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="requestTitle">Заголовок:</label>
+        <input type="text" id="requestTitle" required>
+      </div>
+      <div class="form-group">
+        <label for="requestComment">Комментарий:</label>
+        <textarea id="requestComment"></textarea>
+      </div>
+      <button onclick="submitRequest()">Отправить заявку</button>
+
+      <h2>История заявок</h2>
+      <div class="requests-history">
+        <!-- Динамически загружаемые заявки -->
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="profile">
+      <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
+      <span>Алексей Иванов</span>
+    </div>
+  </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
