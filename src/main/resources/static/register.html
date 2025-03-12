@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h2>Регистрация</h2>
+<form id="registerForm">
+    <label>Email: <input type="email" id="email" required></label><br>
+    <label>Пароль: <input type="password" id="password" required></label><br>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/authService.js"></script>
+
+<script type="module">
+    import { registerUser } from "./js/authService.js";
+
+    document.getElementById("registerForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        registerUser(email, password);
+    });
+</script>
+</body>
+</html>

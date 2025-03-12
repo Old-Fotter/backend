@@ -15,12 +15,11 @@
 
     <div class="sidebar">
         <nav>
-            <a href="payments.html" class="active">Платежи</a>
+            <a href="payments.html">Платежи</a>
             <a href="index.html">Подача показаний</a>
-            <a href="requests.html">Заявки</a>
+            <a href="requests.html" class="active">Заявки</a>
             <a href="services.html">Услуги</a>
-            <a href="#notifications">Уведомления</a>
-            <a href="#profile">Профиль</a>
+            <a href="profile.html">Профиль</a>
         </nav>
     </div>
 
@@ -41,7 +40,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Данные будут загружены динамически -->
+
                 </tbody>
             </table>
         </div>
@@ -50,13 +49,13 @@
     <footer>
         <div class="profile">
             <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
-            <span>Алексей Иванов</span>
+            <span>Дмитрий Алексеев</span>
         </div>
     </footer>
 </div>
 
 <script>
-    // Функция для загрузки платежей для пользователя с userId = 1
+
     function loadPayments() {
       fetch("http://localhost:8080/api/payments/1")
         .then(response => {
@@ -68,15 +67,15 @@
             tbody.innerHTML = "";
             data.forEach(payment => {
                 const row = document.createElement("tr");
-                // Если платеж уже оплачен, кнопка будет неактивной с текстом "Оплачено"
+
                 let buttonHtml = "";
                 if (payment.paid) {
                     buttonHtml = `<button disabled>Оплачено</button>`;
                 } else {
-                    // Передаем payment.id для обновления статуса
+
                     buttonHtml = `<button onclick="markAsPaid(this, ${payment.id}, ${payment.amount})">Оплатить</button>`;
                 }
-                // Форматируем дату создания, если она присутствует
+
                 let createdAt = payment.createdAt ? new Date(payment.createdAt).toLocaleString() : "";
                 row.innerHTML = `
                   <td>${payment.readingId || '-'}</td>
@@ -94,7 +93,6 @@
         .catch(error => console.error("Ошибка:", error));
     }
 
-    // Функция для изменения статуса платежа через API
     function markAsPaid(button, paymentId, amount) {
       fetch(`http://localhost:8080/api/payments/${paymentId}/pay`, {
         method: 'POST',
@@ -106,7 +104,7 @@
       })
       .then(updatedPayment => {
         alert("Фиктивная оплата на сумму: " + amount);
-        // Перезагружаем платежи после обновления статуса
+
         loadPayments();
       })
       .catch(error => {
@@ -115,10 +113,8 @@
       });
     }
 
-    // Загружаем платежи при загрузке страницы
     document.addEventListener("DOMContentLoaded", loadPayments);
 
-    // Функция для перехода на страницу заявок (если понадобится)
     function showRequestsPage() {
       window.location.href = "requests.html";
     }

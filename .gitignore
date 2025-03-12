@@ -38,3 +38,7 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+
+src/main/resources/firebase-config.json
+src/main/resources/static/js/firebase.js
