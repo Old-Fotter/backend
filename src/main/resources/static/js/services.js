@@ -1,3 +1,8 @@
+// services.js
+
+import { getCurrentUserId } from './authService.js';
+import { auth } from './firebase.js';
+
 function showTab(tabId) {
     const tabs = document.getElementsByClassName('tab-content');
     for (let tab of tabs) {
@@ -16,6 +21,9 @@ function showTab(tabId) {
     }
 }
 
+window.showTab = showTab; // Чтобы HTML-кнопка могла вызывать showTab(...)
+
+// ====== Загрузка списка услуг по категории ======
 function loadServicesByCategory(category) {
     const url = `http://localhost:8080/api/services/category/${category}`;
     fetch(url, {
@@ -54,7 +62,9 @@ function loadServicesByCategory(category) {
     })
     .catch(error => showMessage(error.message, 'error'));
 }
+window.loadServicesByCategory = loadServicesByCategory; // чтобы вызывать из HTML кнопок
 
+// ====== Показ формы заказа ======
 function showOrderForm(serviceId) {
     document.getElementById('order-form').style.display = 'block';
     loadServiceDetails(serviceId);
@@ -62,6 +72,7 @@ function showOrderForm(serviceId) {
     setDefaultDateTime();
 }
 
+// ====== Подробности услуги ======
 function loadServiceDetails(serviceId) {
     fetch(`http://localhost:8080/api/services/${serviceId}`, {
         method: 'GET',
@@ -81,6 +92,7 @@ function loadServiceDetails(serviceId) {
     .catch(error => showMessage(error.message, 'error'));
 }
 
+// ====== Загрузка адресов пользователя ======
 function loadAddressesForOrder() {
     const userId = getCurrentUserId();
     if (!userId) {
@@ -113,6 +125,7 @@ function loadAddressesForOrder() {
     .catch(error => showMessage(error.message, 'error'));
 }
 
+// ====== Подставляем текущее время в поле dateTime ======
 function setDefaultDateTime() {
     const dateTimeInput = document.getElementById('dateTime');
     const now = new Date();
@@ -124,6 +137,7 @@ function setDefaultDateTime() {
     dateTimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+// ====== Отправка заказа ======
 function submitServiceOrder() {
     const userId = getCurrentUserId();
     if (!userId) {
@@ -165,11 +179,15 @@ function submitServiceOrder() {
     })
     .catch(error => showMessage(error.message, 'error'));
 }
+window.submitServiceOrder = submitServiceOrder; // чтобы кнопка могла вызвать
 
+// ====== Скрыть форму заказа ======
 function hideOrderForm() {
     document.getElementById('order-form').style.display = 'none';
 }
+window.hideOrderForm = hideOrderForm;
 
+// ====== Загрузка истории заказов ======
 function loadOrderHistory() {
     const userId = getCurrentUserId();
     if (!userId) {
@@ -192,7 +210,7 @@ function loadOrderHistory() {
             ordersDiv.innerHTML = '<p>Нет истории заказов</p>';
         } else {
             orders.forEach(order => {
-                // Здесь можно доработать: подгрузка деталей услуги, адреса и т.д.
+                // Здесь можно доработать: подгрузка деталей услуги, адреса, статуса и т.д.
                 const orderItem = document.createElement('div');
                 orderItem.className = 'order-item';
                 orderItem.innerHTML = `
@@ -211,11 +229,12 @@ function loadOrderHistory() {
     .catch(error => showMessage(error.message, 'error'));
 }
 
+// Заглушка-метод для отображения адреса по ID
 function getAddressName(addressId) {
-    // Заглушка. Здесь можно реализовать запрос для получения адреса по ID.
     return 'ул. Ленина, д. 10';
 }
 
+// Вывод сообщений
 function showMessage(message, type) {
     const messageDiv = document.createElement('div');
     messageDiv.textContent = message;
@@ -225,6 +244,20 @@ function showMessage(message, type) {
     setTimeout(() => messageDiv.remove(), 5000);
 }
 
+// ====== При загрузке страницы делаем: ======
 document.addEventListener('DOMContentLoaded', function() {
+    // Сразу показываем вкладку категорий
     showTab('categories');
+
+    // Аутентификация, чтобы внизу показать email
+    auth.onAuthStateChanged(user => {
+      const profileSpan = document.querySelector('.profile span');
+      if (!profileSpan) return; // Мало ли
+
+      if (user) {
+        profileSpan.textContent = user.email;
+      } else {
+        profileSpan.textContent = "Не авторизован";
+      }
+    });
 });
