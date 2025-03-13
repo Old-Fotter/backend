@@ -15,9 +15,9 @@
 
     <div class="sidebar">
         <nav>
-            <a href="payments.html">Платежи</a>
+            <a href="payments.html" class="active">Платежи</a>
             <a href="index.html">Подача показаний</a>
-            <a href="requests.html" class="active">Заявки</a>
+            <a href="requests.html">Заявки</a>
             <a href="services.html">Услуги</a>
             <a href="profile.html">Профиль</a>
         </nav>
@@ -40,7 +40,7 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                <!-- Заполняется динамически -->
                 </tbody>
             </table>
         </div>
@@ -49,75 +49,12 @@
     <footer>
         <div class="profile">
             <img src="profile-placeholder.png" alt="Профиль" class="profile-img">
-            <span>Дмитрий Алексеев</span>
+            <span>Загрузка...</span>
         </div>
     </footer>
 </div>
 
-<script>
-
-    function loadPayments() {
-      fetch("http://localhost:8080/api/payments/1")
-        .then(response => {
-          if (!response.ok) throw new Error("Ошибка загрузки платежей");
-          return response.json();
-        })
-        .then(data => {
-            const tbody = document.getElementById("paymentsTable").querySelector("tbody");
-            tbody.innerHTML = "";
-            data.forEach(payment => {
-                const row = document.createElement("tr");
-
-                let buttonHtml = "";
-                if (payment.paid) {
-                    buttonHtml = `<button disabled>Оплачено</button>`;
-                } else {
-
-                    buttonHtml = `<button onclick="markAsPaid(this, ${payment.id}, ${payment.amount})">Оплатить</button>`;
-                }
-
-                let createdAt = payment.createdAt ? new Date(payment.createdAt).toLocaleString() : "";
-                row.innerHTML = `
-                  <td>${payment.readingId || '-'}</td>
-                  <td>${payment.address}</td>
-                  <td>${payment.meterCategory}</td>
-                  <td>${payment.difference}</td>
-                  <td>${payment.tariff}</td>
-                  <td>${payment.amount}</td>
-                  <td>${createdAt}</td>
-                  <td>${buttonHtml}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        })
-        .catch(error => console.error("Ошибка:", error));
-    }
-
-    function markAsPaid(button, paymentId, amount) {
-      fetch(`http://localhost:8080/api/payments/${paymentId}/pay`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(response => {
-        if (!response.ok) throw new Error("Ошибка при оплате");
-        return response.json();
-      })
-      .then(updatedPayment => {
-        alert("Фиктивная оплата на сумму: " + amount);
-
-        loadPayments();
-      })
-      .catch(error => {
-        console.error("Ошибка:", error);
-        alert("Ошибка при оплате");
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", loadPayments);
-
-    function showRequestsPage() {
-      window.location.href = "requests.html";
-    }
-</script>
+<!-- Подключаем payments.js как ES-модуль -->
+<script type="module" src="js/payments.js"></script>
 </body>
 </html>
