@@ -1,6 +1,7 @@
 import { getCurrentUserId } from './authService.js';
 import { auth } from "./firebase.js";
 
+
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         const userId = getCurrentUserId();
@@ -36,6 +37,7 @@ function showTab(tabId) {
         loadHistory();
     }
 }
+window.showTab = showTab;
 
 function showReadingsPage() {
     document.getElementById('requests-page').style.display = 'none';
@@ -49,13 +51,6 @@ function showRequestsPage() {
         document.getElementById('requests-page').style.display = 'block';
     }, 100);
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.location.pathname.includes('requests.html')) {
-        loadRequestAddresses();
-        loadRequestHistory();
-    }
-});
 
 document.addEventListener("DOMContentLoaded", function() {
     auth.onAuthStateChanged(user => {
@@ -187,6 +182,8 @@ function submitMeterReading(meterId) {
     })
     .catch(error => showMessage(error.message, 'error'));
 }
+window.submitMeterReading = submitMeterReading;
+
 
 function loadHistory() {
     const userId = getCurrentUserId();
@@ -208,6 +205,12 @@ function loadHistory() {
     .then(readings => {
         const historyDiv = document.querySelector('.history');
         historyDiv.innerHTML = '';
+
+        if (readings.length === 0) {
+            showMessage("Добавьте изменения в счетчики", "info");
+            return;
+        }
+
         readings.forEach(reading => {
             const historyItem = document.createElement('div');
             historyItem.className = 'history-item';
@@ -265,25 +268,49 @@ window.addAddress = function addAddress() {
     .catch(error => showMessage(error.message, 'error'));
 };
 
+window.submitRequest = submitRequest;
+window.loadRequestAddresses = loadRequestAddresses;
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Проверяем, на какой странице мы
+    if (window.location.pathname.endsWith("requests.html")) {
+        // Логика для requests.html
+        auth.onAuthStateChanged(user => {
+            const userEmailSpan = document.getElementById("userEmail");
+            if (user && userEmailSpan) {
+                userEmailSpan.textContent = user.email;
+                loadRequestAddresses();   // грузим адреса
+                loadRequestHistory();     // грузим историю заявок
+            } else if (userEmailSpan) {
+                userEmailSpan.textContent = "Не авторизован";
+            }
+        });
+    }
+});
+
 function loadRequestAddresses() {
     const userId = getCurrentUserId();
     if (!userId) {
         console.error("Ошибка: не удалось получить userId");
         return;
     }
+    console.log("🔍 Запрашиваю адреса для userId:", userId);
+
     fetch(`http://localhost:8080/api/meters/addresses/${userId}`, {
         method: 'GET',
-        headers: {
-            'Accept': 'application/json'
-        }
+        headers: { 'Accept': 'application/json' }
     })
-    .then(response => {
-        if (!response.ok) throw new Error('Ошибка при загрузке адресов');
-        return response.json();
-    })
+    .then(response => response.json())
     .then(addresses => {
+        console.log("✅ Полученные адреса:", addresses);
         const select = document.getElementById('requestAddressId');
         select.innerHTML = '<option value="">Выберите адрес</option>';
+
+        if (!addresses.length) {
+            showMessage('Вы еще не добавили адреса!', 'info');
+            return;
+        }
+
         addresses.forEach(address => {
             const option = document.createElement('option');
             option.value = address.id;
@@ -291,8 +318,9 @@ function loadRequestAddresses() {
             select.appendChild(option);
         });
     })
-    .catch(error => showMessage(error.message, 'error'));
+    .catch(error => showMessage(error, 'error'));
 }
+
 
 function submitRequest() {
     const userId = getCurrentUserId();
@@ -383,3 +411,4 @@ function showMessage(message, type) {
     content.insertBefore(messageDiv, content.querySelector('h2') || content.firstChild);
     setTimeout(() => messageDiv.remove(), 5000);
 }
+
