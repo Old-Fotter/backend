@@ -34,7 +34,7 @@ class ServiceController(private val service: ServiceService) {
     }
 
     @GetMapping("/orders/history/{userId}")
-    fun getOrderHistory(@PathVariable userId: Long): ResponseEntity<List<ServiceOrder>> {
+    fun getOrderHistory(@PathVariable userId: String): ResponseEntity<List<ServiceOrder>> {
         return ResponseEntity.ok(service.getOrderHistory(userId))
     }
     @GetMapping("/{serviceId}")
@@ -46,7 +46,7 @@ class ServiceController(private val service: ServiceService) {
 }
 
 data class ServiceOrderRequest(
-    val userId: Long,
+    val userId: String,
     val serviceId: Long,
     val addressId: Long,
     val dateTime: LocalDateTime,

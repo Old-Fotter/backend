@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RequestRepository : JpaRepository<Request, Long> {
-    fun findByUserId(userId: Long): List<Request>
-    fun findByUserIdOrderByDateDesc(userId: Long): List<Request>
+    fun findByUserId(userId: String): List<Request>
+    fun findByUserIdOrderByDateDesc(userId: String): List<Request>
 }

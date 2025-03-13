@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class RequestService(private val requestRepository: RequestRepository) {
 
-    fun submitRequest(userId: Long, addressId: Long, title: String, comment: String? = null): Request {
+    fun submitRequest(userId: String, addressId: Long, title: String, comment: String? = null): Request {
         val request = Request(
             userId = userId,
             addressId = addressId,
@@ -17,7 +17,7 @@ class RequestService(private val requestRepository: RequestRepository) {
         return requestRepository.save(request)
     }
 
-    fun getRequestHistory(userId: Long): List<Request> {
+    fun getRequestHistory(userId: String): List<Request> {
         return requestRepository.findByUserIdOrderByDateDesc(userId)
     }
 

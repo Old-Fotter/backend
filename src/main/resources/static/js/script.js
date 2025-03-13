@@ -1,3 +1,18 @@
+import { getCurrentUserId } from './authService.js';
+import { auth } from "./firebase.js";
+
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+        const userId = getCurrentUserId();
+        if (!userId) {
+            console.error("Ошибка: не удалось получить userId");
+            return;
+        }
+        console.log("✅ Загружен userId:", userId);
+        loadAddresses(userId);
+    }, 1000);
+});
+
 function showTab(tabId) {
     const tabs = document.getElementsByClassName('tab-content');
     for (let tab of tabs) {
@@ -12,7 +27,11 @@ function showTab(tabId) {
     document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
 
     if (tabId === 'submit') {
-        loadAddresses();
+
+        const userId = getCurrentUserId();
+        if (userId) {
+            loadAddresses(userId);
+        }
     } else if (tabId === 'history') {
         loadHistory();
     }
@@ -28,15 +47,15 @@ function showRequestsPage() {
     setTimeout(() => {
         document.querySelector('.container').style.display = 'none';
         document.getElementById('requests-page').style.display = 'block';
-    }, 100); // Даем странице время загрузиться
+    }, 100);
 }
+
 document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.includes('requests.html')) {
         loadRequestAddresses();
         loadRequestHistory();
     }
 });
-import { auth } from "./firebase.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     auth.onAuthStateChanged(user => {
@@ -50,15 +69,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 document.addEventListener("DOMContentLoaded", function() {
     const addAddressBtn = document.getElementById('addAddressBtn');
-    addAddressBtn.addEventListener('click', showAddAddressForm);
-
+    if (addAddressBtn) {
+        addAddressBtn.addEventListener('click', showAddAddressForm);
+    }
     showTab('submit');
-
 });
 
+function loadAddresses(userId) {
+    if (!userId) {
+        console.error(" Ошибка: userId не передан в loadAddresses");
+        return;
+    }
+    console.log(" Загружаем адреса для userId:", userId);
 
-function loadAddresses() {
-    const userId = 1;
     fetch(`http://localhost:8080/api/meters/addresses/${userId}`, {
         method: 'GET',
         headers: {
@@ -127,9 +150,13 @@ function loadMeters(addressId) {
 }
 
 function submitMeterReading(meterId) {
-    const userId = 1;
-    const currentValue = document.querySelector(`.meter-value[data-meter-id="${meterId}"]`).value;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
 
+    const currentValue = document.querySelector(`.meter-value[data-meter-id="${meterId}"]`).value;
     if (!currentValue) {
         showMessage('Пожалуйста, введите значение', 'error');
         return;
@@ -156,13 +183,18 @@ function submitMeterReading(meterId) {
     .then(result => {
         showMessage('Показания успешно поданы!', 'success');
         document.querySelector(`.meter-value[data-meter-id="${meterId}"]`).value = '';
-        loadAddresses();
+        loadAddresses(userId);
     })
     .catch(error => showMessage(error.message, 'error'));
 }
 
 function loadHistory() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
+
     fetch(`http://localhost:8080/api/meter-readings/history-with-address/${userId}`, {
         method: 'GET',
         headers: {
@@ -203,21 +235,23 @@ window.hideAddAddressForm = function hideAddAddressForm() {
 }
 
 window.addAddress = function addAddress() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
     const address = document.getElementById('newAddress').value;
-
     if (!address) {
         showMessage('Пожалуйста, введите адрес', 'error');
         return;
     }
-
     fetch('http://localhost:8080/api/meters/addresses', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ address: address })
+        body: JSON.stringify({ address: address, userId: userId }) // передаем userId, если бэкенд это поддерживает
     })
     .then(response => {
         if (!response.ok) throw new Error('Ошибка при добавлении адреса');
@@ -226,13 +260,17 @@ window.addAddress = function addAddress() {
     .then(result => {
         showMessage('Адрес успешно добавлен!', 'success');
         hideAddAddressForm();
-        loadAddresses();
+        loadAddresses(userId);
     })
     .catch(error => showMessage(error.message, 'error'));
 };
 
 function loadRequestAddresses() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
     fetch(`http://localhost:8080/api/meters/addresses/${userId}`, {
         method: 'GET',
         headers: {
@@ -257,23 +295,24 @@ function loadRequestAddresses() {
 }
 
 function submitRequest() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
     const addressId = document.getElementById('requestAddressId').value;
     const title = document.getElementById('requestTitle').value;
     const comment = document.getElementById('requestComment').value;
-
     if (!addressId || !title) {
         showMessage('Пожалуйста, заполните обязательные поля', 'error');
         return;
     }
-
     const data = {
         userId: userId,
         addressId: parseInt(addressId),
         title: title,
         comment: comment || null
     };
-
     fetch('http://localhost:8080/api/requests', {
         method: 'POST',
         headers: {
@@ -296,7 +335,11 @@ function submitRequest() {
 }
 
 function loadRequestHistory() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
     fetch(`http://localhost:8080/api/requests/history/${userId}`, {
         method: 'GET',
         headers: {
@@ -328,9 +371,10 @@ function loadRequestHistory() {
 }
 
 function getAddressName(addressId) {
-    // Здесь можно добавить реальный запрос к /api/meters/addresses/{addressId}, но для простоты используем заглушку
+    // Заглушка: можно заменить реальным запросом
     return 'ул. Ленина, д. 10';
 }
+
 function showMessage(message, type) {
     const messageDiv = document.createElement('div');
     messageDiv.textContent = message;

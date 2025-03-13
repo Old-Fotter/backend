@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 class PaymentController(private val paymentService: PaymentService) {
 
     @GetMapping("/{userId}")
-    fun getPayments(@PathVariable userId: Long): ResponseEntity<List<Payment>> {
+    fun getPayments(@PathVariable userId: String): ResponseEntity<List<Payment>> {
         val payments = paymentService.getPayments(userId)
         return ResponseEntity.ok(payments)
     }

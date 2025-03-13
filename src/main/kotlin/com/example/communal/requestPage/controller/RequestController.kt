@@ -21,7 +21,7 @@ class RequestController(private val service: RequestService) {
     }
 
     @GetMapping("/history/{userId}")
-    fun getRequestHistory(@PathVariable userId: Long): ResponseEntity<List<Request>> {
+    fun getRequestHistory(@PathVariable userId: String): ResponseEntity<List<Request>> {
         val history = service.getRequestHistory(userId)
         return ResponseEntity.ok(history)
     }
@@ -34,7 +34,7 @@ class RequestController(private val service: RequestService) {
 }
 
 data class RequestRequest(
-    val userId: Long,
+    val userId: String,
     val addressId: Long,
     val title: String,
     val comment: String? = null

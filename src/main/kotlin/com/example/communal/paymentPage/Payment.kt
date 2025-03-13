@@ -11,7 +11,7 @@ data class Payment(
     val id: Long? = null,
 
     val readingId: Long,
-    val userId: Long,
+    val userId: String,
     val address: String,
     @Enumerated(EnumType.STRING)
     val meterCategory: MeterCategory,

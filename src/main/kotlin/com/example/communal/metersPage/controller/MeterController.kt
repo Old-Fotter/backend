@@ -9,6 +9,7 @@ import com.example.communal.metersPage.repository.MeterReadingRepository
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @RestController
 @RequestMapping("/api/meters")
@@ -19,7 +20,7 @@ class MeterController(
 ) {
 
     @GetMapping("/addresses/{userId}")
-    fun getUserAddresses(@PathVariable userId: Long = 1): ResponseEntity<List<com.example.communal.metersPage.model.MeterAddress>> {
+    fun getUserAddresses(@PathVariable userId: String): ResponseEntity<List<com.example.communal.metersPage.model.MeterAddress>> {
         return ResponseEntity.ok(addressRepository.findByUserId(userId))
     }
 
@@ -29,7 +30,9 @@ class MeterController(
     }
     @PostMapping("/addresses")
     fun addAddress(@RequestBody request: AddressRequest): ResponseEntity<MeterAddress> {
-        val newAddress = MeterAddress(userId = 1, address = request.address)
+        val firebaseUserId = request.userId
+
+        val newAddress = MeterAddress(userId = firebaseUserId, address = request.address)
         val savedAddress = addressRepository.save(newAddress)
 
         val meters = listOf(
@@ -44,10 +47,10 @@ class MeterController(
 
 }
 
-data class AddressRequest(val address: String)
+data class AddressRequest(val userId: String, val address: String)
 
 data class MeterRequest(
-    val userId: Long,
+    val userId: String,
     val address: String,
     val meterCategory: MeterCategory,
     val initialValue: Double

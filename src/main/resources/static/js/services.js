@@ -82,7 +82,12 @@ function loadServiceDetails(serviceId) {
 }
 
 function loadAddressesForOrder() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
+
     fetch(`http://localhost:8080/api/meters/addresses/${userId}`, {
         method: 'GET',
         headers: { 'Accept': 'application/json' }
@@ -120,7 +125,12 @@ function setDefaultDateTime() {
 }
 
 function submitServiceOrder() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
+
     const serviceId = document.getElementById('serviceId').value;
     const addressId = document.getElementById('addressId').value;
     const dateTime = document.getElementById('dateTime').value;
@@ -161,7 +171,12 @@ function hideOrderForm() {
 }
 
 function loadOrderHistory() {
-    const userId = 1;
+    const userId = getCurrentUserId();
+    if (!userId) {
+        console.error("Ошибка: не удалось получить userId");
+        return;
+    }
+
     fetch(`http://localhost:8080/api/services/orders/history/${userId}`, {
         method: 'GET',
         headers: { 'Accept': 'application/json' }

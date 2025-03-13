@@ -15,7 +15,7 @@ class MeterReadingService(
     private val meterReadingRepository: MeterReadingRepository,
     private val paymentService: PaymentService
 ) {
-    fun submitReading(userId: Long, meterId: Long, currentValue: Double): MeterReading {
+    fun submitReading(userId: String, meterId: Long, currentValue: Double): MeterReading {
         val meter = meterRepository.findById(meterId)
             .orElseThrow { IllegalArgumentException("Счетчик не найден") }
 
@@ -49,11 +49,11 @@ class MeterReadingService(
             .orElseThrow { RuntimeException("Meter reading not found") }
     }
 
-    fun getReadingsHistory(userId: Long): List<MeterReading> {
+    fun getReadingsHistory(userId: String): List<MeterReading> {
         return meterReadingRepository.findByUserIdOrderBySubmittedAtDesc(userId)
     }
 
-    fun getReadingsHistoryWithAddress(userId: Long): List<Map<String, Any>> {
+    fun getReadingsHistoryWithAddress(userId: String): List<Map<String, Any>> {
         val readingsWithAddress = meterReadingRepository.findHistoryWithAddress(userId)
         return readingsWithAddress.map { result ->
             val reading = result[0] as MeterReading

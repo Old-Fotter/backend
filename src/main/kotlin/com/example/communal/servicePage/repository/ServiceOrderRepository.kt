@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ServiceOrderRepository : JpaRepository<ServiceOrder, Long> {
-    fun findByUserId(userId: Long): List<ServiceOrder>
-    fun findByUserIdOrderByDateTimeDesc(userId: Long): List<ServiceOrder>
+    fun findByUserId(userId: String): List<ServiceOrder>
+    fun findByUserIdOrderByDateTimeDesc(userId: String): List<ServiceOrder>
 }

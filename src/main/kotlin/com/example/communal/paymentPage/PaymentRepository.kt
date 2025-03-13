@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PaymentRepository : JpaRepository<Payment, Long> {
-    fun findByUserId(userId: Long): List<Payment>
+    fun findByUserId(userId: String): List<Payment>
     fun existsByReadingId(readingId: Long): Boolean
 }

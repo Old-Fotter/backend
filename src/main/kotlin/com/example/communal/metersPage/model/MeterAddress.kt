@@ -8,7 +8,7 @@ data class MeterAddress(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val userId: Long,
+    val userId: String,
     val address: String
 )
 

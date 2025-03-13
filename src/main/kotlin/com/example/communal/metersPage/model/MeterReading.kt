@@ -9,7 +9,7 @@ data class MeterReading(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val userId: Long,
+    val userId: String,
     val addressId: Long,
     @Enumerated(EnumType.STRING)
     val meterCategory: MeterCategory,

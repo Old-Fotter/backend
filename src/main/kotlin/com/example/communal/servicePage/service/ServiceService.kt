@@ -21,7 +21,7 @@ class ServiceService(
         return serviceRepository.findByCategory(category)
     }
 
-    fun submitServiceOrder(userId: Long, serviceId: Long, addressId: Long, dateTime: LocalDateTime, comment: String? = null): ServiceOrder {
+    fun submitServiceOrder(userId: String, serviceId: Long, addressId: Long, dateTime: LocalDateTime, comment: String? = null): ServiceOrder {
         val serviceOrder = ServiceOrder(
             userId = userId,
             serviceId = serviceId,
@@ -32,7 +32,7 @@ class ServiceService(
         return serviceOrderRepository.save(serviceOrder)
     }
 
-    fun getOrderHistory(userId: Long): List<ServiceOrder> {
+    fun getOrderHistory(userId: String): List<ServiceOrder> {
         return serviceOrderRepository.findByUserIdOrderByDateTimeDesc(userId)
     }
 

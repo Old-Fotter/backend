@@ -18,7 +18,7 @@ class PaymentService(
     private val HOT_WATER_TARIFF = 2.0
     private val COLD_WATER_TARIFF = 1.5
 
-    fun calculateAndSavePayments(userId: Long): List<Payment> {
+    fun calculateAndSavePayments(userId: String): List<Payment> {
         val payments = mutableListOf<Payment>()
         val meters = meterRepository.findByUserId(userId)
         for (meter in meters) {
@@ -54,7 +54,7 @@ class PaymentService(
         return paymentRepository.saveAll(payments)
     }
 
-    fun getPayments(userId: Long): List<Payment> {
+    fun getPayments(userId: String): List<Payment> {
         return paymentRepository.findByUserId(userId)
     }
 

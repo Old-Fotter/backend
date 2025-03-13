@@ -9,11 +9,11 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MeterReadingRepository : JpaRepository<MeterReading, Long> {
-    fun findByUserId(userId: Long): List<MeterReading>
+    fun findByUserId(userId: String): List<MeterReading>
     @Query("SELECT m FROM MeterReading m WHERE m.userId = :userId AND m.meterCategory = :meterCategory ORDER BY m.submittedAt DESC LIMIT 1")
-    fun findLatestByUserAndCategory(@Param("userId") userId: Long, @Param("meterCategory") meterCategory: MeterCategory): MeterReading?
+    fun findLatestByUserAndCategory(@Param("userId") userId: String, @Param("meterCategory") meterCategory: MeterCategory): MeterReading?
 
-    fun findByUserIdOrderBySubmittedAtDesc(userId: Long): List<MeterReading>
+    fun findByUserIdOrderBySubmittedAtDesc(userId: String): List<MeterReading>
 
     @Query("""
     SELECT mr, ma 
@@ -22,6 +22,6 @@ interface MeterReadingRepository : JpaRepository<MeterReading, Long> {
     WHERE mr.userId = :userId 
     ORDER BY mr.submittedAt DESC
 """)
-    fun findHistoryWithAddress(@Param("userId") userId: Long): List<Array<Any>>
+    fun findHistoryWithAddress(@Param("userId") userId: String): List<Array<Any>>
 
 }

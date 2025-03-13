@@ -11,7 +11,7 @@ data class ServiceOrder(
     val id: Long? = null,
 
     @Column(nullable = false)
-    val userId: Long,
+    val userId: String,
 
     @Column(nullable = false)
     val serviceId: Long,

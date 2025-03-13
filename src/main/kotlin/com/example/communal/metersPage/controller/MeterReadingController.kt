@@ -21,7 +21,7 @@ class MeterReadingController(private val service: MeterReadingService) {
     }
 
     @GetMapping("/history-with-address/{userId}")
-    fun getHistoryWithAddress(@PathVariable userId: Long): ResponseEntity<List<Map<String, Any>>> {
+    fun getHistoryWithAddress(@PathVariable userId: String): ResponseEntity<List<Map<String, Any>>> {
         val history = service.getReadingsHistoryWithAddress(userId)
         return ResponseEntity.ok(history)
     }
@@ -33,14 +33,14 @@ class MeterReadingController(private val service: MeterReadingService) {
     }
 
     @GetMapping("/history/{userId}")
-    fun getHistory(@PathVariable userId: Long): ResponseEntity<List<MeterReading>> {
+    fun getHistory(@PathVariable userId: String): ResponseEntity<List<MeterReading>> {
         val history = service.getReadingsHistory(userId)
         return ResponseEntity.ok(history)
     }
 }
 
 data class MeterReadingRequest(
-    val userId: Long,
+    val userId: String,
     val meterId: Long,
     val currentValue: Double
 )

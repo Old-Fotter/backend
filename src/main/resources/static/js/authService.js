@@ -1,10 +1,17 @@
-import { auth } from "./firebase.js";
-import { setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+import { auth, onAuthStateChanged } from "./firebase.js";
+import {
+  setPersistence,
+  browserLocalPersistence,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 
-console.log("✅ authService.js загружен!");
+console.log(" authService.js загружен!");
 
 setPersistence(auth, browserLocalPersistence)
-    .then(() => console.log("✅ Firebase запоминает пользователя"))
+    .then(() => console.log(" Firebase запоминает пользователя"))
     .catch(error => console.error("Ошибка персистентности:", error));
 
 export const registerUser = async (email, password) => {
@@ -31,3 +38,35 @@ export const loginUser = async (email, password) => {
         alert("Ошибка: " + error.message);
     }
 };
+
+let currentUserId = null;
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUserId = user.uid;
+        console.log(" Пользователь найден:", user.uid);
+    } else {
+        currentUserId = null;
+        console.error(" Пользователь не найден!");
+    }
+});
+
+export function logout() {
+    signOut(auth).then(() => {
+        console.log(" Пользователь вышел");
+        window.location.href = "/login.html";
+    }).catch(error => {
+        console.error("Ошибка при выходе: ", error);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", logout);
+    }
+});
+
+export function getCurrentUserId() {
+    return currentUserId;
+}
