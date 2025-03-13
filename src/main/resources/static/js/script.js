@@ -48,9 +48,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
+    const addAddressBtn = document.getElementById('addAddressBtn');
+    addAddressBtn.addEventListener('click', showAddAddressForm);
+
     showTab('submit');
+
 });
+
 
 function loadAddresses() {
     const userId = 1;
@@ -157,7 +162,7 @@ function submitMeterReading(meterId) {
 }
 
 function loadHistory() {
-    const userId = 1; // Фиксированный userId
+    const userId = 1;
     fetch(`http://localhost:8080/api/meter-readings/history-with-address/${userId}`, {
         method: 'GET',
         headers: {
@@ -189,15 +194,15 @@ function loadHistory() {
     .catch(error => showMessage(error.message, 'error'));
 }
 
-function showAddAddressForm() {
+window.showAddAddressForm = function showAddAddressForm() {
     document.getElementById('add-address-form').style.display = 'block';
 }
 
-function hideAddAddressForm() {
+window.hideAddAddressForm = function hideAddAddressForm() {
     document.getElementById('add-address-form').style.display = 'none';
 }
 
-function addAddress() {
+window.addAddress = function addAddress() {
     const userId = 1;
     const address = document.getElementById('newAddress').value;
 
@@ -224,7 +229,7 @@ function addAddress() {
         loadAddresses();
     })
     .catch(error => showMessage(error.message, 'error'));
-}
+};
 
 function loadRequestAddresses() {
     const userId = 1;
