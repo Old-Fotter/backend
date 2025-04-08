@@ -13,25 +13,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "admin", "-d", "mydatabase"]
-      interval: 10s
-      retries: 5
-      timeout: 5s
-
-  backend:
-    build: .
-    container_name: communal-backend
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin
-    ports:
-      - "8080:8080"
 
   frontend:
     build:
@@ -42,7 +23,7 @@ services:
     ports:
       - "8081:80"
     depends_on:
-      - backend
+      - postgres
 
 volumes:
   postgres_data:
